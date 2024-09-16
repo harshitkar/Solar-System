@@ -1,11 +1,3 @@
-//
-//  model.h
-//  COSC3000
-//
-//  Created by Keyne Kassapa on 26/5/19.
-//  Copyright © 2019 Keyne Kassapa. All rights reserved.
-//
-
 #pragma once
 
 #include <string>
@@ -18,12 +10,12 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "../SOIL2/SOIL2.h"
+#include <SOIL2/SOIL2.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "mesh.h"
+#include <planet/mesh.h>
 
 using namespace std;
 
@@ -140,6 +132,8 @@ private:
                 texture.type = typeName;
                 texture.path = str;
                 textures.push_back( texture );
+
+                cout << texture.id << " ";
                 
                 this->textures_loaded.push_back( texture );
             }
@@ -152,6 +146,7 @@ private:
 GLint TextureFromFile( const char *path, string directory ) {
     string filename = string( path );
     filename = directory + '/' + filename;
+
     GLuint textureID;
     glGenTextures( 1, &textureID );
     

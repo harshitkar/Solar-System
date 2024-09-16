@@ -1,11 +1,3 @@
-//
-//  mesh.h
-//  COSC3000
-//
-//  Created by Keyne Kassapa on 26/5/19.
-//  Copyright © 2019 Keyne Kassapa. All rights reserved.
-//
-
 #pragma once
 
 #include <string>

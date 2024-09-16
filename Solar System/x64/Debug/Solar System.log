@@ -1,10 +1,70 @@
 ﻿  SolarSystem.cpp
-C:\Users\haras\source\repos\Solar System\Include\planet\mesh.h(74,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  (compiling source file 'SolarSystem.cpp')
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(22,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(23,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(24,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(41,28): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(41,33): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(41,38): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(48,30): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(48,35): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(48,40): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(88,17): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(98,24): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(98,18): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(98,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(107,18): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(107,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(116,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(134,22): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(134,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(143,17): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(143,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(147,22): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(147,17): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(147,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(160,17): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(160,12): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(319,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(320,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(328,11): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(332,11): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(350,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(351,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  SolarSystem2.cpp
+C:\Users\haras\source\repos\Solar System\Include\planet\mesh.h(66,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'SolarSystem2.cpp')
   
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(24,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(107,30): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(164,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(165,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(185,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(186,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(206,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(207,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(229,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(230,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(250,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(251,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(271,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(272,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(294,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(295,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(317,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(318,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(447,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(448,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(452,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(453,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(455,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem2.cpp(456,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  Generating Code...
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-SolarSystem.obj : error LNK2001: unresolved external symbol "int __cdecl planet(void)" (?planet@@YAHXZ)
-C:\Users\haras\source\repos\Solar System\x64\Debug\Solar System.exe : fatal error LNK1120: 1 unresolved externals
+  Generating code
+  Finished generating code
+SOIL.lib(SOIL.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(SOIL.obj)' or at ''; linking object as if no debug info
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(stb_image_aug.obj)' or at ''; linking object as if no debug info
+SOIL.lib(image_helper.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(image_helper.obj)' or at ''; linking object as if no debug info
+SOIL.lib(image_DXT.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(image_DXT.obj)' or at ''; linking object as if no debug info
+  Solar System.vcxproj -> C:\Users\haras\source\repos\Solar System\x64\Debug\Solar System.exe
