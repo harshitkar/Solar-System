@@ -406,7 +406,7 @@ void showMenu() {
 
     std::cout << "Exit the Simulation:\n";
     std::cout << "  Quit the simulation at any time.\n";
-    std::cout << "  Action: Press Q.\n";
+    std::cout << "  Action: Press Q.\n\n\n";
 }
 
 
