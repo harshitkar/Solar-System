@@ -133,7 +133,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SolarSystem.cpp" />
-    <ClCompile Include="SolarSystem2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

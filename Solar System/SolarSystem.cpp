@@ -1,370 +1,510 @@
-#include<stdio.h> 
-#include<stdlib.h> 
-#include<glut.h> 
-#include<math.h> 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+#include <fstream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 #include <SOIL.h>
+#include <sstream>
+#include <string>
+#include <string>
+#include <vector>
+#include <planet/shader.h>
+#include <planet/camera.h>
+#include <planet/model.h>
 
-static int m = 0, M = 0, v = 0, V = 0, E = 0, e = 0, r = 0, R = 0, j = 0, J = 0, s = 0, S = 0, U = 0, u = 0, n = 0, N = 0, x = 0, z = 0;
+#define GLEW_STATIC
+using namespace std;
 
-static GLint axis = 2;
-float zoom = 5.0; // Camera distance for zooming
-float angleX = 0.0f, angleY = 0.0f; // Camera angles for rotation
-float lastMouseX = 0.0f, lastMouseY = 0.0f; // Track last mouse position
-int isDragging = 0; // To check if mouse is dragging
+const GLint WIDTH = 1400, HEIGHT = 800;
+const double PI = 3.141592653589793238463;
+int SCREEN_WIDTH, SCREEN_HEIGHT;
 
-GLfloat diffuseMaterial[4] = { 0.5,0.5,0.5,1.0 };
+// Function prototypes
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void MouseCallback(GLFWwindow* window, double xPos, double yPos);
+void DoMovement();
 
-void drawStars() {
-	int numStars = 100;
-	glPointSize(2.0);
-	glBegin(GL_POINTS);
-	for (int i = 0; i < numStars; i++) {
-		float xCord = (rand() % 201 - 100) / 10.0;
-		float yCord = (rand() % 201 - 100) / 10.0;
-		float zCord = (rand() % 201 - 100) / 10.0;
+// Camera
+Camera camera(glm::vec3(40.0f, 0.0f, 30.0f));
+bool keys[1024];
+GLfloat lastX = 400, lastY = 300;
+bool firstMouse = true;
+string cameraType = "";
 
-		glColor3f(1.0, 1.0, 1.0);
-		glVertex3f(xCord, yCord, zCord);
-	}
-	glEnd();
+// Light attributes
+glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
+
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
+
+GLfloat speed = 1.0f;
+
+void showMenu();
+
+int main() {
+
+    showMenu();
+
+    bool move = true;
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "learn Opengl", nullptr, nullptr);
+
+    if (nullptr == window)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+
+        return EXIT_FAILURE;
+    }
+
+    glfwMakeContextCurrent(window);
+    glfwGetFramebufferSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
+    glfwSetKeyCallback(window, KeyCallback);
+    glfwSetCursorPosCallback(window, MouseCallback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glewExperimental = GL_TRUE;
+    if (GLEW_OK != glewInit())
+    {
+        std::cout << "Failed to initialize GLEW" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glEnable(GL_DEPTH_TEST);
+
+    Shader* shader = new Shader("resources/shaders/modelLoading.vs", "resources/shaders/modelLoading.frag");
+    Shader* directionalShader = new Shader("resources/shaders/directional.vs", "resources/shaders/directional.frag");
+    Shader* lampShader = new Shader("resources/shaders/lamp.vs", "resources/shaders/lamp.frag");
+
+    // Load models
+    Model* earthModel = new Model((GLchar*)"resources/models/earth/Earth.obj");
+    Model* space = new Model((GLchar*)"resources/models/space/space.obj");
+    Model* sunModel = new Model((GLchar*)"resources/models/sun/sun.obj");
+    Model* mercuryModel = new Model((GLchar*)"resources/models/mercury/mercury.obj");
+    Model* venusModel = new Model((GLchar*)"resources/models/venus/venus.obj");
+    Model* marsModel = new Model((GLchar*)"resources/models/mars/mars.obj");
+    Model* jupiterModel = new Model((GLchar*)"resources/models/jupiter/jupiter.obj");
+    Model* saturnModel = new Model((GLchar*)"resources/models/saturn/13906_Saturn_v1_l3.obj");
+    Model* uranusModel = new Model((GLchar*)"resources/models/uranus/13907_Uranus_v2_l3.obj");
+    Model* neptuneModel = new Model((GLchar*)"resources/models/neptune/13908_Neptune_v2_l3.obj");
+
+    //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+    glm::mat4 projection(1);
+    projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+
+    GLfloat scale = 0.1f;
+    GLuint i = 0;
+    while (!glfwWindowShouldClose(window))
+    {
+        GLfloat currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        i++;
+        glfwPollEvents();
+        DoMovement();
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        glm::mat4 view(1);
+        view = camera.GetViewMatrix();
+
+        directionalShader->Use();
+
+        // Set lights properties
+        glUniform3f(glGetUniformLocation(directionalShader->Program, "light.position"), lightPos.x, lightPos.y, lightPos.z);
+        glUniform3f(glGetUniformLocation(directionalShader->Program, "light.ambient"), 0.2f, 0.2f, 0.2f);
+        glUniform3f(glGetUniformLocation(directionalShader->Program, "light.diffuse"), 1.5f, 1.5f, 1.5f);
+        glUniform3f(glGetUniformLocation(directionalShader->Program, "light.specular"), 0.0f, 0.0f, 0.0f);
+
+        glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+        // Model
+
+        // SPACE
+        glm::mat4 model(1);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(20.0f));
+        glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        space->Draw(*directionalShader);
+
+        GLfloat angle, radius, x, y;
+
+        shader->Use();
+        GLint viewPosLoc = glGetUniformLocation(shader->Program, "viewPos");
+        glUniform3f(viewPosLoc, camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+
+        // Set lights properties
+        glUniform3f(glGetUniformLocation(shader->Program, "light.position"), lightPos.x, lightPos.y, lightPos.z);
+        glUniform3f(glGetUniformLocation(shader->Program, "light.ambient"), 0.2f, 0.2f, 0.2f);
+        glUniform3f(glGetUniformLocation(shader->Program, "light.diffuse"), 1.5f, 1.5f, 1.5f);
+        glUniform3f(glGetUniformLocation(shader->Program, "light.specular"), 0.0f, 0.0f, 0.0f);
+        glUniform1f(glGetUniformLocation(shader->Program, "light.constant"), 1.0f);
+        glUniform1f(glGetUniformLocation(shader->Program, "light.linear"), 0.02f);
+        glUniform1f(glGetUniformLocation(shader->Program, "light.quadratic"), 0.006f);
+
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+
+        // MERCURY
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.008f * i * speed;
+            radius = 70.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(70.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Mercury") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.3f * scale));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        mercuryModel->Draw(*shader);
+
+        // VENUS
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.007f * i * speed;
+            radius = 80.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(80.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Venus") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.5f * scale));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        venusModel->Draw(*shader);
+
+        // EARTH
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.006f * i * speed;
+            radius = 90.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(90.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Earth") {
+            camera.SetPosition(glm::vec3(x + 0.5f, -0.5f, y + 0.5f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.5f * scale));
+        angle = 0.001f * i;
+        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.1f, 0.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        earthModel->Draw(*shader);
+
+        // MARS
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.005f * i * speed;
+            radius = 100.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(100.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Mars") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.3f * scale));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        marsModel->Draw(*shader);
+
+        // JUPITER
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.0045f * i * speed;
+            radius = 120.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(120.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Jupiter") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.5f));
+        }
+
+        model = glm::scale(model, glm::vec3(4.0f * scale));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        jupiterModel->Draw(*shader);
+
+        // SATURN
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.0040f * i * speed;
+            radius = 160.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(160.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Saturn") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.5f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.032f * scale));
+        angle = 0.0001f * i;
+        model = glm::rotate(model, 90.0f + angle, glm::vec3(0.0f, 0.1f, 0.5f));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        saturnModel->Draw(*shader);
+
+        // Uranus
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.0035f * i * speed;
+            radius = 190.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(190.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Uranus") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.0f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.03f * scale));
+        angle = 0.00001f * i;
+        model = glm::rotate(model, 160.0f + angle, glm::vec3(0.0f, 0.1f, 0.5f));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        uranusModel->Draw(*shader);
+
+        // NEPTUNE
+        model = glm::mat4(1);
+        if (move) {
+            angle = 0.003f * i * speed;
+            radius = 220.0f * scale;
+            x = radius * sin(PI * 2 * angle / 360);
+            y = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+        }
+        else {
+            model = glm::translate(model, glm::vec3(220.0f * scale, 0.0f, 0.0f));
+        }
+
+        if (cameraType == "Neptune") {
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.0f));
+        }
+
+        model = glm::scale(model, glm::vec3(0.03f * scale));
+        angle = 0.00001f * i;
+        model = glm::rotate(model, 130.0f + angle, glm::vec3(0.0f, 0.1f, 0.5f));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        neptuneModel->Draw(*shader);
+
+        // SUN
+        lampShader->Use();
+        GLint modelLoc = glGetUniformLocation(lampShader->Program, "model");
+        GLint viewLoc = glGetUniformLocation(lampShader->Program, "view");
+        GLint projLoc = glGetUniformLocation(lampShader->Program, "projection");
+
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        model = glm::mat4(1);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(20.0f * scale));
+        glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        sunModel->Draw(*lampShader);
+
+        if (cameraType == "Up") {
+            camera.SetPosition(glm::vec3(-1.438195, 38.160343, 1.159209));
+        }
+
+        glfwSwapBuffers(window);
+    }
+
+    glfwTerminate();
+    return 0;
 }
 
-// initialize material property, light source, lighting model, and depth buffer
-void myinit(void) {
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
+void showMenu() {
+    std::cout << "Menu Options:\n\n";
 
-	// Material properties
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat mat_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };  // White light for Sun
-	GLfloat mat_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-	GLfloat mat_shininess = 25.0;
+    std::cout << "Toggle Planet Movements:\n";
+    std::cout << "  Toggle planetary orbits on or off.\n";
+    std::cout << "  Action: Press M.\n\n";
 
-	// Light properties
-	GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 }; // Sun's position
-	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };  // White light
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 }; // White specular reflection
-	GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1.0 };  // Dim ambient light
+    std::cout << "Control Simulation Speed:\n";
+    std::cout << "  Increase or decrease the simulation speed.\n";
+    std::cout << "  Actions:\n";
+    std::cout << "    Increase speed: Press + or Up Arrow.\n";
+    std::cout << "    Decrease speed: Press - or Down Arrow.\n\n";
 
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
+    std::cout << "Change Camera View:\n";
+    std::cout << "  Switch between different planet cameras for an immersive experience.\n";
+    std::cout << "  Actions:\n";
+    std::cout << "    View Mercury: Press 1.\n";
+    std::cout << "    View Venus: Press 2.\n";
+    std::cout << "    View Earth: Press 3.\n";
+    std::cout << "    View Mars: Press 4.\n";
+    std::cout << "    View Jupiter: Press 5.\n";
+    std::cout << "    View Saturn: Press 6.\n";
+    std::cout << "    View Uranus: Press 7.\n";
+    std::cout << "    View Neptune: Press 8.\n";
+    std::cout << "    Free Camera: Press F.\n\n";
 
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+    std::cout << "Zoom Camera:\n";
+    std::cout << "  Zoom in and out for closer or wider views of the planets.\n";
+    std::cout << "  Actions:\n";
+    std::cout << "    Zoom In: Scroll Up or Press Z.\n";
+    std::cout << "    Zoom Out: Scroll Down or Press X.\n\n";
 
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    std::cout << "Pause and Resume Simulation:\n";
+    std::cout << "  Pause or resume planetary movements and camera controls.\n";
+    std::cout << "  Actions: Press P.\n\n";
 
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	glEnable(GL_COLOR_MATERIAL);
+    std::cout << "Change Light Intensity:\n";
+    std::cout << "  Adjust the intensity of the light source (Sun) affecting the planets.\n";
+    std::cout << "  Actions:\n";
+    std::cout << "    Increase light intensity: Press L.\n";
+    std::cout << "    Decrease light intensity: Press K.\n\n";
+
+    std::cout << "Exit the Simulation:\n";
+    std::cout << "  Quit the simulation at any time.\n";
+    std::cout << "  Action: Press Q.\n";
 }
 
-void display(void) {
-	GLfloat position[] = { 0.0, 0.0, 1.5, 1.0 };
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3f(1.0, 0.5, 0.0);
 
-	GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 }; // Sun's position
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+void DoMovement() {
 
-	// Adjusting the view for zoom and rotation
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, zoom, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP]) {
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    }
 
-	// Apply camera rotation
-	glRotatef(angleY, 1.0, 0.0, 0.0); // Rotate vertically
-	glRotatef(angleX, 0.0, 1.0, 0.0); // Rotate horizontally
+    if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN]) {
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    }
 
-	// Draw the Sun
-	glPushMatrix();
-	glRotatef((float)z, 1.0f, 1.0f, 1.0f); // Rotate sun
-	glDisable(GL_LIGHTING);
-	glColor3f(1.0, 0.8, 0.0); // Yellow-orange color for the sun's surface
-	glutSolidSphere(0.5, 40, 16); // Render the sphere
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
+    if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT]) {
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    }
 
-	// Mercury
-	glPushMatrix();
-	glRotatef((float)M, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(1.2f, 0.0f, 0.0f); // Position Mercury
-	glRotatef((float)m, 0.0f, 1.0f, 0.0f); // Rotate Mercury
-	glColor3f(0.55, 0.57, 0.58); // Mercury color: Gray
-	glutSolidSphere(0.04, 20, 8); // Render Mercury
-	glPopMatrix();
+    if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) {
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
 
-	// Venus
-	glPushMatrix();
-	glRotatef((float)V, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(2.0f, 0.0f, 0.0f); // Position Venus
-	glRotatef((float)v, 0.0f, 1.0f, 0.0f); // Rotate Venus
-	glColor3f(0.76, 0.69, 0.50); // Venus color: Yellowish
-	glutSolidSphere(0.05, 20, 8); // Render Venus
-	glPopMatrix();
+    if (keys[GLFW_KEY_MINUS]) {
+        camera.DecreaseSpeed();
+    }
 
-	// Earth
-	glPushMatrix();
-	glRotatef((float)E, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(2.8f, 0.0f, 0.0f); // Position Earth
-	glRotatef((float)e, 0.0f, 1.0f, 0.0f); // Rotate Earth
-	glColor3f(0.2, 0.5, 1.0); // Earth color: Blue
-	glutSolidSphere(0.053, 20, 8); // Render Earth
-	glPopMatrix();
+    if (keys[GLFW_KEY_EQUAL]) {
+        camera.IncreaseSpeed();
+    }
 
-	// Mars
-	glPushMatrix();
-	glRotatef((float)R, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(3.5f, 0.0f, 0.0f); // Position Mars
-	glRotatef((float)r, 0.0f, 1.0f, 0.0f); // Rotate Mars
-	glColor3f(1.0, 0.0, 0.0); // Mars color: Red
-	glutSolidSphere(0.04, 20, 8); // Render Mars
-	glPopMatrix();
+    if (keys[GLFW_KEY_1]) {
+        cameraType = "Mercury";
+    }
+    else if (keys[GLFW_KEY_2]) {
+        cameraType = "Venus";
+    }
+    else if (keys[GLFW_KEY_3]) {
+        cameraType = "Earth";
+    }
+    else if (keys[GLFW_KEY_4]) {
+        cameraType = "Mars";
+    }
+    else if (keys[GLFW_KEY_5]) {
+        cameraType = "Jupiter";
+    }
+    else if (keys[GLFW_KEY_6]) {
+        cameraType = "Saturn";
+    }
+    else if (keys[GLFW_KEY_7]) {
+        cameraType = "Uranus";
+    }
+    else if (keys[GLFW_KEY_8]) {
+        cameraType = "Neptune";
+    }
+    else if (keys[GLFW_KEY_0]) {
+        cameraType = "";
+    }
+    else if (keys[GLFW_KEY_U]) {
+        cameraType = "Up";
+    }
 
-	// Jupiter
-	glPushMatrix();
-	glRotatef((float)J, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(4.5f, 0.0f, 0.0f); // Position Jupiter
-	glRotatef((float)j, 0.0f, 1.0f, 0.0f); // Rotate Jupiter
-	glColor3f(0.8, 0.5, 0.2); // Jupiter color: Orange-brown
-	glutSolidSphere(0.18, 20, 8); // Render Jupiter
-	glPopMatrix();
-
-	// Saturn
-	glPushMatrix();
-	glRotatef((float)S, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(5.5f, 0.0f, 0.0f); // Position Saturn
-	glRotatef((float)s, 0.0f, 1.0f, 0.0f); // Rotate Saturn
-	glColor3f(0.8, 0.8, 0.5); // Saturn color: Pale yellow
-	glutSolidSphere(0.15, 20, 8); // Render Saturn
-
-	// Draw rings
-	glColor3f(0.6, 0.6, 0.6); // Saturn's ring color: Gray
-	glPushMatrix();
-	glRotatef(90, 1.0f, 0.0f, 0.0f); // Rotate ring to be horizontal
-	glutWireTorus(0.02, 0.25, 30, 30); // Render ring
-	glPopMatrix();
-
-	glPopMatrix();
-
-	// Uranus
-	glPushMatrix();
-	glRotatef((float)U, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(6.5f, 0.0f, 0.0f); // Position Uranus
-	glRotatef((float)u, 0.0f, 1.0f, 0.0f); // Rotate Uranus
-	glColor3f(0.4, 0.8, 1.0); // Uranus color: Light blue
-	glutSolidSphere(0.12, 20, 8); // Render Uranus
-	glPopMatrix();
-
-	// Neptune
-	glPushMatrix();
-	glRotatef((float)N, 0.0f, 1.0f, 0.0f); // Orbit around the sun
-	glTranslatef(7.5f, 0.0f, 0.0f); // Position Neptune
-	glRotatef((float)n, 0.0f, 1.0f, 0.0f); // Rotate Neptune
-	glColor3f(0.0, 0.0, 1.0); // Neptune color: Dark blue
-	glutSolidSphere(0.12, 20, 8); // Render Neptune
-	glPopMatrix();
-
-	// Draw stars with sun-like color
-	drawStars();
-
-	glutSwapBuffers();
+    if (keys[GLFW_KEY_M]) {
+        speed = speed + 0.1f;
+        std::cout << "SPEED : " << speed << std::endl;
+    }
+    else if (keys[GLFW_KEY_N]) {
+        speed = speed - 0.1f;
+        std::cout << "SPEED : " << speed << std::endl;
+    }
 }
 
-void reshape(int w, int h) {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 20.0);
-	glMatrixMode(GL_MODELVIEW);
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action) {
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    }
+
+    if (key >= 0 && key < 1024) {
+        if (action == GLFW_PRESS) {
+            keys[key] = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            keys[key] = false;
+        }
+    }
 }
 
-void keyboard(unsigned char key, int x, int y) {
-	int mod = glutGetModifiers();  // Get current modifiers (Ctrl, Shift, Alt)
-	float zoomFactor = 0.1f;
-	switch (key) {
-	case 'z':
-		z = (z + 50) % 360;
-		glutPostRedisplay();
-		break;
-	case 'm':
-		m = (m + 3) % 360;
-		glutPostRedisplay();
-		break;
-	case 'M':
-		M = (M + 12) % 360;
-		glutPostRedisplay();
-		break;
-	case 'v':
-		v = (v + 2) % 360;
-		glutPostRedisplay();
-		break;
-	case 'V':
-		V = (V + 10) % 360;
-		glutPostRedisplay();
-		break;
-	case 'e':
-		e = (e + 5) % 360;
-		glutPostRedisplay();
-		break;
-	case 'E':
-		E = (E + 8) % 360;
-		glutPostRedisplay();
-		break;
-	case 'r':
-		r = (r + 6) % 360;
-		glutPostRedisplay();
-		break;
-	case 'R':
-		R = (R + 6) % 360;
-		glutPostRedisplay();
-		break;
-	case 'j':
-		j = (j + 10) % 360;
-		glutPostRedisplay();
-		break;
-	case 'J':
-		J = (J + 4) % 360;
-		glutPostRedisplay();
-		break;
-	case 's':
-		s = (s + 9) % 360;
-		glutPostRedisplay();
-		break;
-	case 'S':
-		S = (S + 3) % 360;
-		glutPostRedisplay();
-		break;
-	case 'u':
-		u = (u + 8) % 360;
-		glutPostRedisplay();
-		break;
-	case 'U':
-		U = (U + 2) % 360;
-		glutPostRedisplay();
-		break;
-	case 'n':
-		n = (n + 7) % 360;
-		glutPostRedisplay();
-		break;
-	case 'N':
-		N = (N + 1) % 360;
-		glutPostRedisplay();
-		break;
-	case 'x':
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		gluLookAt(0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
-		glutPostRedisplay();
-		break;
-		break;
-	case 13:
-		//Enter
-		z = (z + 50) % 360;
-		m = (m + 3) % 360;
-		M = (M + 12) % 360;
-		v = (v + 2) % 360;
-		V = (V - 10) % 360;
-		e = (e + 5) % 360;
-		E = (E + 8) % 360;
-		r = (r + 6) % 360;
-		R = (R + 6) % 360;
-		j = (j + 10) % 360;
-		J = (J + 4) % 360;
-		s = (s + 9) % 360;
-		S = (S + 3) % 360;
-		u = (u + 8) % 360;
-		U = (U - 2) % 360;
-		n = (n + 7) % 360;
-		N = (N + 1) % 360;
-		glutPostRedisplay();
-		break;
-	case 8:
-		//backspace
-		z = (z - 50) % 360;
-		m = (m - 3) % 360;
-		M = (M - 12) % 360;
-		v = (v - 2) % 360;
-		V = (V + 10) % 360;
-		e = (e - 5) % 360;
-		E = (E - 8) % 360;
-		r = (r - 6) % 360;
-		R = (R - 6) % 360;
-		j = (j - 10) % 360;
-		J = (J - 4) % 360;
-		s = (s - 9) % 360;
-		S = (S - 3) % 360;
-		u = (u - 8) % 360;
-		U = (U + 2) % 360;
-		n = (n - 7) % 360;
-		N = (N - 1) % 360;
-		glutPostRedisplay();
-		break;
-	case 27:
-		exit(0);
-		break;
-	default:
-		break;
-	}
-}
+void MouseCallback(GLFWwindow* window, double xPos, double yPos) {
+    if (firstMouse) {
+        lastX = xPos;
+        lastY = yPos;
+        firstMouse = false;
+    }
 
-void mouse(int button, int state, int x, int y) {
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		isDragging = 1;  // Start dragging
-		lastMouseX = x;
-		lastMouseY = y;
-	}
-	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-		isDragging = 0;  // Stop dragging
-	}
+    GLfloat xOffset = xPos - lastX;
+    GLfloat yOffset = lastY - yPos;
 
-	// Zoom functionality
-	if (button == 3) { // Scroll up
-		zoom -= 0.2;
-		if (zoom < 1.0) zoom = 1.0; // Limit zoom-in
-	}
-	else if (button == 4) { // Scroll down
-		zoom += 0.2;
-		if (zoom > 15.0) zoom = 15.0; // Limit zoom-out
-	}
-	glutPostRedisplay();
-}
+    lastX = xPos;
+    lastY = yPos;
 
-void motion(int x, int y) {
-	if (isDragging) {
-		float deltaX = (x - lastMouseX);
-		float deltaY = (y - lastMouseY);
-
-		angleX += deltaX * 0.2f; // Adjust sensitivity as needed
-		angleY += deltaY * 0.2f;
-
-		// Limit vertical rotation to avoid flipping
-		if (angleY > 90.0f) angleY = 90.0f;
-		if (angleY < -90.0f) angleY = -90.0f;
-
-		lastMouseX = x;
-		lastMouseY = y;
-
-		glutPostRedisplay(); // Redraw with updated angles
-	}
-}
-
-int main(int argc, char** argv) {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(500, 500);
-	glutCreateWindow("Solar System");
-	myinit();
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutMouseFunc(mouse);  // Register mouse function
-	glutMotionFunc(motion); // Register motion function for dragging
-	glutKeyboardFunc(keyboard);
-	glutMainLoop();
-	return 0;
+    camera.ProcessMouseMovement(xOffset, yOffset);
 }

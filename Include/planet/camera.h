@@ -87,12 +87,12 @@ public:
     }
     
     void DecreaseSpeed() {
-        this->movementSpeed = this->movementSpeed - 0.01f;
+        this->movementSpeed = this->movementSpeed - 0.1f;
         std::cout << "CAMERA SPEED : " << this->movementSpeed << std::endl;
     }
     
     void IncreaseSpeed() {
-        this->movementSpeed = this->movementSpeed + 0.01f;
+        this->movementSpeed = this->movementSpeed + 0.1f;
         std::cout << "CAMERA SPEED : " << this->movementSpeed << std::endl;
     }
     
