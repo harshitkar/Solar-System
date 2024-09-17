@@ -76,7 +76,6 @@ GLint TextureFromFile(const char* path, string directory) {
 
     // Check if the last directory is "space"
     if (getLastDirectory(directory) == "space") {
-        std::cout << "Skipping texture loading for directory 'space': " << std::endl;
         return 0;
     }
 
@@ -89,8 +88,6 @@ GLint TextureFromFile(const char* path, string directory) {
     if (!image) {
         std::cerr << "Failed to load texture at " << filename << std::endl;
         return 0;
-    } else {
-        std::cout << "Loaded texture: " << filename << " (" << width << "x" << height << ")" << std::endl;
     }
 
     glBindTexture(GL_TEXTURE_2D, textureID);
@@ -228,8 +225,6 @@ private:
                     textures.push_back(texture);
 
                     this->textures_loaded.push_back(texture);
-                } else {
-                    std::cout << "Skipping texture for directory 'space': " << str.C_Str() << std::endl;
                 }
             }
         }

@@ -30,7 +30,7 @@ public:
     vector<GLuint> indices;
     vector<Texture> textures;
     
-    Mesh( vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures ) {
+    Mesh( vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures) {
         this->vertices = vertices;
         this->indices = indices;
         this->textures = textures;
@@ -63,7 +63,7 @@ public:
 
             number = ss.str();
 
-            if (this->textures[i].id != 0) {
+            if (this->textures[i].id > 0) {
                 glUniform1i(glGetUniformLocation(shader.Program, (name + number).c_str()), i);
                 glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
 
@@ -76,7 +76,6 @@ public:
             else {
                 std::cerr << "Warning: Texture [" << name + number << "] is missing or has an invalid ID." << std::endl;
             }
-
         }
 
         glUniform1f(glGetUniformLocation(shader.Program, "material.shininess"), 16.0f);
@@ -92,7 +91,7 @@ public:
 
         glBindVertexArray(0);
 
-        // Reset textures
+        // Reset textures for non-space objects
         for (GLuint i = 0; i < this->textures.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, 0);

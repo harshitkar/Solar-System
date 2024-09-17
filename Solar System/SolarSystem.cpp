@@ -16,9 +16,12 @@
 #include <planet/shader.h>
 #include <planet/camera.h>
 #include <planet/model.h>
+#include <TEXTRENDERER.h>
 
 #define GLEW_STATIC
 using namespace std;
+
+bool revolve;
 
 const GLint WIDTH = 1400, HEIGHT = 800;
 const double PI = 3.141592653589793238463;
@@ -49,8 +52,8 @@ void showMenu();
 int main() {
 
     showMenu();
+    revolve = true;
 
-    bool move = true;
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -99,12 +102,12 @@ int main() {
     Model* uranusModel = new Model((GLchar*)"resources/models/uranus/13907_Uranus_v2_l3.obj");
     Model* neptuneModel = new Model((GLchar*)"resources/models/neptune/13908_Neptune_v2_l3.obj");
 
-    //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
     glm::mat4 projection(1);
     projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
-    GLfloat scale = 0.1f;
+    double radii[8] = {70.0f, 80.0f, 90.0f, 140.0f, };
+
+    GLfloat scale = 0.1f,  angle;
     GLuint i = 0;
     while (!glfwWindowShouldClose(window))
     {
@@ -142,7 +145,7 @@ int main() {
         glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         space->Draw(*directionalShader);
 
-        GLfloat angle, radius, x, y;
+        GLfloat radius, x, y;
 
         shader->Use();
         GLint viewPosLoc = glGetUniformLocation(shader->Program, "viewPos");
@@ -162,7 +165,7 @@ int main() {
 
         // MERCURY
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.008f * i * speed;
             radius = 70.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
@@ -178,12 +181,14 @@ int main() {
         }
 
         model = glm::scale(model, glm::vec3(0.3f * scale));
+        angle = 0.001f * i;
+        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.1f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         mercuryModel->Draw(*shader);
 
         // VENUS
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.007f * i * speed;
             radius = 80.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
@@ -199,12 +204,14 @@ int main() {
         }
 
         model = glm::scale(model, glm::vec3(0.5f * scale));
+        angle = 0.001f * i;
+        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.1f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         venusModel->Draw(*shader);
 
         // EARTH
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.006f * i * speed;
             radius = 90.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
@@ -216,7 +223,7 @@ int main() {
         }
 
         if (cameraType == "Earth") {
-            camera.SetPosition(glm::vec3(x + 0.5f, -0.5f, y + 0.5f));
+            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
         }
 
         model = glm::scale(model, glm::vec3(0.5f * scale));
@@ -227,9 +234,9 @@ int main() {
 
         // MARS
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.005f * i * speed;
-            radius = 100.0f * scale;
+            radius = 110.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
             y = radius * cos(PI * 2 * angle / 360);
             model = glm::translate(model, glm::vec3(x, 0.0f, y));
@@ -243,14 +250,16 @@ int main() {
         }
 
         model = glm::scale(model, glm::vec3(0.3f * scale));
+        angle = 0.0005f * i;
+        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.1f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         marsModel->Draw(*shader);
 
         // JUPITER
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.0045f * i * speed;
-            radius = 120.0f * scale;
+            radius = 140.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
             y = radius * cos(PI * 2 * angle / 360);
             model = glm::translate(model, glm::vec3(x, 0.0f, y));
@@ -264,14 +273,16 @@ int main() {
         }
 
         model = glm::scale(model, glm::vec3(4.0f * scale));
+        angle = 0.0005f * i;
+        model = glm::rotate(model, angle, glm::vec3(0.0f, 0.1f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         jupiterModel->Draw(*shader);
 
         // SATURN
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.0040f * i * speed;
-            radius = 160.0f * scale;
+            radius = 180.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
             y = radius * cos(PI * 2 * angle / 360);
             model = glm::translate(model, glm::vec3(x, 0.0f, y));
@@ -292,9 +303,9 @@ int main() {
 
         // Uranus
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.0035f * i * speed;
-            radius = 190.0f * scale;
+            radius = 210.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
             y = radius * cos(PI * 2 * angle / 360);
             model = glm::translate(model, glm::vec3(x, 0.0f, y));
@@ -315,9 +326,9 @@ int main() {
 
         // NEPTUNE
         model = glm::mat4(1);
-        if (move) {
+        if (revolve) {
             angle = 0.003f * i * speed;
-            radius = 220.0f * scale;
+            radius = 240.0f * scale;
             x = radius * sin(PI * 2 * angle / 360);
             y = radius * cos(PI * 2 * angle / 360);
             model = glm::translate(model, glm::vec3(x, 0.0f, y));
@@ -365,15 +376,16 @@ int main() {
 void showMenu() {
     std::cout << "Menu Options:\n\n";
 
-    std::cout << "Toggle Planet Movements:\n";
-    std::cout << "  Toggle planetary orbits on or off.\n";
-    std::cout << "  Action: Press M.\n\n";
+    std::cout << "Control revolution speed of planets:\n";
+    std::cout << "  Actions:\n";
+    std::cout << "  Increase speed: Press M.\n";
+    std::cout << "  Decrease speed: Press N.\n\n";
 
     std::cout << "Control Simulation Speed:\n";
     std::cout << "  Increase or decrease the simulation speed.\n";
     std::cout << "  Actions:\n";
-    std::cout << "    Increase speed: Press + or Up Arrow.\n";
-    std::cout << "    Decrease speed: Press - or Down Arrow.\n\n";
+    std::cout << "    Increase speed: Press + \n";
+    std::cout << "    Decrease speed: Press - \n\n";
 
     std::cout << "Change Camera View:\n";
     std::cout << "  Switch between different planet cameras for an immersive experience.\n";
@@ -388,25 +400,11 @@ void showMenu() {
     std::cout << "    View Neptune: Press 8.\n";
     std::cout << "    Free Camera: Press F.\n\n";
 
-    std::cout << "Zoom Camera:\n";
-    std::cout << "  Zoom in and out for closer or wider views of the planets.\n";
-    std::cout << "  Actions:\n";
-    std::cout << "    Zoom In: Scroll Up or Press Z.\n";
-    std::cout << "    Zoom Out: Scroll Down or Press X.\n\n";
-
-    std::cout << "Pause and Resume Simulation:\n";
-    std::cout << "  Pause or resume planetary movements and camera controls.\n";
+    std::cout << "Pause and Resume Revolution Simulation:\n";
     std::cout << "  Actions: Press P.\n\n";
 
-    std::cout << "Change Light Intensity:\n";
-    std::cout << "  Adjust the intensity of the light source (Sun) affecting the planets.\n";
-    std::cout << "  Actions:\n";
-    std::cout << "    Increase light intensity: Press L.\n";
-    std::cout << "    Decrease light intensity: Press K.\n\n";
-
     std::cout << "Exit the Simulation:\n";
-    std::cout << "  Quit the simulation at any time.\n";
-    std::cout << "  Action: Press Q.\n\n\n";
+    std::cout << "  Action: Press ESC.\n\n\n";
 }
 
 
@@ -465,15 +463,22 @@ void DoMovement() {
     }
     else if (keys[GLFW_KEY_U]) {
         cameraType = "Up";
+    } 
+    else if (keys[GLFW_KEY_P]) {
+        if (speed == 0) {
+            speed = 0.5f;
+        }
+        else {
+            speed = 0;
+        }
     }
-
     if (keys[GLFW_KEY_M]) {
+        if (speed <= 10)
         speed = speed + 0.1f;
-        std::cout << "SPEED : " << speed << std::endl;
     }
     else if (keys[GLFW_KEY_N]) {
+        if (speed >= 0.1f)
         speed = speed - 0.1f;
-        std::cout << "SPEED : " << speed << std::endl;
     }
 }
 

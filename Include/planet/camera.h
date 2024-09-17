@@ -87,13 +87,11 @@ public:
     }
     
     void DecreaseSpeed() {
-        this->movementSpeed = this->movementSpeed - 0.1f;
-        std::cout << "CAMERA SPEED : " << this->movementSpeed << std::endl;
+        this->movementSpeed = this->movementSpeed - 0.01f;
     }
     
     void IncreaseSpeed() {
-        this->movementSpeed = this->movementSpeed + 0.1f;
-        std::cout << "CAMERA SPEED : " << this->movementSpeed << std::endl;
+        this->movementSpeed = this->movementSpeed + 0.01f;
     }
     
     GLfloat GetZoom() {
