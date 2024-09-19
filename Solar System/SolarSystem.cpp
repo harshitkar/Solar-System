@@ -13,10 +13,9 @@
 #include <string>
 #include <string>
 #include <vector>
-#include <planet/shader.h>
-#include <planet/camera.h>
-#include <planet/model.h>
-#include <TEXTRENDERER.h>
+#include "shader.h"
+#include "camera.h"
+#include "model.h"
 
 #define GLEW_STATIC
 using namespace std;

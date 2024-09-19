@@ -1,5 +1,5 @@
 ﻿  SolarSystem.cpp
-C:\Users\haras\source\repos\Solar System\Include\planet\mesh.h(86,60): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\haras\source\repos\Solar System\Solar System\mesh.h(86,60): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   (compiling source file 'SolarSystem.cpp')
   
 C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(114,30): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
