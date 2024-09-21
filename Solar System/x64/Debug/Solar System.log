@@ -1,30 +1,38 @@
 ﻿  SolarSystem.cpp
-C:\Users\haras\source\repos\Solar System\Solar System\mesh.h(86,60): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\mesh.h(86,60): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   (compiling source file 'SolarSystem.cpp')
   
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(114,30): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(171,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(172,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(194,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(195,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(217,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(218,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(240,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(241,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(263,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(264,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(286,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(287,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(309,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(310,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(332,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(333,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(503,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(504,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(508,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(509,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(511,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\haras\source\repos\Solar System\Solar System\SolarSystem.cpp(512,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(130,30): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(185,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(186,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(187,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(208,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(209,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(210,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(231,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(232,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(233,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(254,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(255,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(256,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(277,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(278,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(279,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(300,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(301,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(302,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(323,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(324,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(325,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(346,31): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(347,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(348,24): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(547,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(548,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(552,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(553,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(555,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\haras\source\repos\Solar system\Solar System\SolarSystem.cpp(556,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
@@ -34,4 +42,4 @@ SOIL.lib(SOIL.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(SOIL.o
 SOIL.lib(stb_image_aug.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(stb_image_aug.obj)' or at ''; linking object as if no debug info
 SOIL.lib(image_helper.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(image_helper.obj)' or at ''; linking object as if no debug info
 SOIL.lib(image_DXT.obj) : warning LNK4099: PDB '' was not found with 'SOIL.lib(image_DXT.obj)' or at ''; linking object as if no debug info
-  Solar System.vcxproj -> C:\Users\haras\source\repos\Solar System\x64\Debug\Solar System.exe
+  Solar System.vcxproj -> C:\Users\haras\source\repos\Solar system\x64\Debug\Solar System.exe
