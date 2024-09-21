@@ -6,8 +6,8 @@
 #include <GL/glew.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtx/string_cast.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <GLM/gtx/string_cast.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
 
 enum Camera_Movement {
     FORWARD,

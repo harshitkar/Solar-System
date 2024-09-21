@@ -8,12 +8,12 @@
 #include <vector>
 
 #include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
 #include <SOIL2/SOIL2.h>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include <ASSIMP/Importer.hpp>
+#include <ASSIMP/scene.h>
+#include <ASSIMP/postprocess.h>
 
 #include "mesh.h"
 
@@ -217,7 +217,7 @@ private:
 
             if (!skip) {
                 // Skip loading texture if the last directory is "space"
-                if (getLastDirectory(directory) != "space") {
+                /*if (getLastDirectory(directory) != "space") {
                     Texture texture;
                     texture.id = TextureFromFile(str.C_Str(), directory);
                     texture.type = typeName;
@@ -225,7 +225,14 @@ private:
                     textures.push_back(texture);
 
                     this->textures_loaded.push_back(texture);
-                }
+                }*/
+                Texture texture;
+                texture.id = TextureFromFile(str.C_Str(), directory);
+                texture.type = typeName;
+                texture.path = str;
+                textures.push_back(texture);
+
+                this->textures_loaded.push_back(texture);
             }
         }
 
