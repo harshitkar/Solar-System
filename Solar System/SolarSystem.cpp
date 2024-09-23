@@ -102,6 +102,8 @@ int main() {
     projection = glm::perspective(camera.GetZoom(), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 
     double radii[8] = {70.0f, 80.0f, 90.0f, 110.0f, 140.0f, 180.0f, 210.0f, 240.0f};
+    GLfloat x[8] = { 7.0f, 8.0f, 9.0f, 11.0f, 14.0f, 18.0f, 21.0f, 24.0f };
+    GLfloat y[8] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 
     GLfloat scale = 0.1f,  angle;
     GLuint i = 0;
@@ -134,7 +136,7 @@ int main() {
         glUniform3f(glGetUniformLocation(directionalShader->Program, "light.position"), lightPos.x, lightPos.y, lightPos.z);
         glUniform3f(glGetUniformLocation(directionalShader->Program, "light.ambient"), 0.2f, 0.2f, 0.2f);
         glUniform3f(glGetUniformLocation(directionalShader->Program, "light.diffuse"), 1.5f, 1.5f, 1.5f);
-        glUniform3f(glGetUniformLocation(directionalShader->Program, "light.specular"), 0.0f, 0.0f, 0.0f);
+        glUniform3f(glGetUniformLocation(directionalShader->Program, "light.specular"), 1.0f, 1.0f, 1.0f);
 
         glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -148,7 +150,7 @@ int main() {
         glUniformMatrix4fv(glGetUniformLocation(directionalShader->Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         space->Draw(*directionalShader);
 
-        GLfloat radius, x, y;
+        GLfloat radius;
 
         shader->Use();
         GLint viewPosLoc = glGetUniformLocation(shader->Program, "viewPos");
@@ -171,16 +173,16 @@ int main() {
         if (revolve) {
             angle = 0.008f * i * speed;
             radius = radii[0] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[0] = radius * sin(PI * 2 * angle / 360);
+            y[0] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[0], 0.0f, y[0]));
         }
         else {
-            model = glm::translate(model, glm::vec3(70.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[0], 0.0f, y[0]));
         }
 
         if (cameraType == "Mercury") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+            camera.SetPosition(glm::vec3(x[0] + 0.5f, 0.0f, y[0] + 0.5f));
         }
 
         model = glm::scale(model, glm::vec3(0.3f * scale));
@@ -194,16 +196,16 @@ int main() {
         if (revolve) {
             angle = 0.007f * i * speed;
             radius = radii[1] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[1] = radius * sin(PI * 2 * angle / 360);
+            y[1] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[1], 0.0f, y[1]));
         }
         else {
-            model = glm::translate(model, glm::vec3(80.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[1], 0.0f, y[1]));
         }
 
         if (cameraType == "Venus") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+            camera.SetPosition(glm::vec3(x[1] + 0.5f, 0.0f, y[1] + 0.5f));
         }
 
         model = glm::scale(model, glm::vec3(0.5f * scale));
@@ -217,16 +219,16 @@ int main() {
         if (revolve) {
             angle = 0.006f * i * speed;
             radius = radii[2] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[2] = radius * sin(PI * 2 * angle / 360);
+            y[2] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[2], 0.0f, y[2]));
         }
         else {
-            model = glm::translate(model, glm::vec3(90.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[2], 0.0f, y[2]));
         }
 
         if (cameraType == "Earth") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+            camera.SetPosition(glm::vec3(x[2] + 0.5f, 0.0f, y[2] + 0.5f));
         }
 
         model = glm::scale(model, glm::vec3(0.5f * scale));
@@ -240,16 +242,16 @@ int main() {
         if (revolve) {
             angle = 0.005f * i * speed;
             radius = radii[3] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[3] = radius * sin(PI * 2 * angle / 360);
+            y[3] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[3], 0.0f, y[3]));
         }
         else {
-            model = glm::translate(model, glm::vec3(100.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[3], 0.0f, y[3]));
         }
 
         if (cameraType == "Mars") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 0.5f));
+            camera.SetPosition(glm::vec3(x[3] + 0.5f, 0.0f, y[3] + 0.5f));
         }
 
         model = glm::scale(model, glm::vec3(0.3f * scale));
@@ -263,16 +265,16 @@ int main() {
         if (revolve) {
             angle = 0.0045f * i * speed;
             radius = radii[4] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[4] = radius * sin(PI * 2 * angle / 360);
+            y[4] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[4], 0.0f, y[4]));
         }
         else {
-            model = glm::translate(model, glm::vec3(120.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[4], 0.0f, y[4]));
         }
 
         if (cameraType == "Jupiter") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.5f));
+            camera.SetPosition(glm::vec3(x[4] + 0.5f, 0.0f, y[4] + 2.5f));
         }
 
         model = glm::scale(model, glm::vec3(4.0f * scale));
@@ -286,16 +288,16 @@ int main() {
         if (revolve) {
             angle = 0.0040f * i * speed;
             radius = radii[5] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[5] = radius * sin(PI * 2 * angle / 360);
+            y[5] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[5], 0.0f, y[5]));
         }
         else {
-            model = glm::translate(model, glm::vec3(160.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[5], 0.0f, y[5]));
         }
 
         if (cameraType == "Saturn") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.5f));
+            camera.SetPosition(glm::vec3(x[5] + 0.5f, 0.0f, y[5] + 2.5f));
         }
 
         model = glm::scale(model, glm::vec3(0.032f * scale));
@@ -309,16 +311,16 @@ int main() {
         if (revolve) {
             angle = 0.0035f * i * speed;
             radius = radii[6] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[6] = radius * sin(PI * 2 * angle / 360);
+            y[6] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[6], 0.0f, y[6]));
         }
         else {
-            model = glm::translate(model, glm::vec3(190.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[6], 0.0f, y[6]));
         }
 
         if (cameraType == "Uranus") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.0f));
+            camera.SetPosition(glm::vec3(x[6] + 0.5f, 0.0f, y[6] + 2.0f));
         }
 
         model = glm::scale(model, glm::vec3(0.03f * scale));
@@ -332,16 +334,16 @@ int main() {
         if (revolve) {
             angle = 0.003f * i * speed;
             radius = radii[7] * scale;
-            x = radius * sin(PI * 2 * angle / 360);
-            y = radius * cos(PI * 2 * angle / 360);
-            model = glm::translate(model, glm::vec3(x, 0.0f, y));
+            x[7] = radius * sin(PI * 2 * angle / 360);
+            y[7] = radius * cos(PI * 2 * angle / 360);
+            model = glm::translate(model, glm::vec3(x[7], 0.0f, y[7]));
         }
         else {
-            model = glm::translate(model, glm::vec3(220.0f * scale, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(x[7], 0.0f, y[7]));
         }
 
         if (cameraType == "Neptune") {
-            camera.SetPosition(glm::vec3(x + 0.5f, 0.0f, y + 2.0f));
+            camera.SetPosition(glm::vec3(x[7] + 0.5f, 0.0f, y[7] + 2.0f));
         }
 
         model = glm::scale(model, glm::vec3(0.03f * scale));
@@ -474,12 +476,7 @@ void DoMovement() {
         cameraType = "Up";
     } 
     else if (keys[GLFW_KEY_P]) {
-        if (speed == 0) {
-            speed = 0.5f;
-        }
-        else {
-            speed = 0;
-        }
+        revolve = !revolve;
     }
     else if (keys[GLFW_KEY_M]) {
         if (speed <= 100)
@@ -494,16 +491,18 @@ void DoMovement() {
     }
 }
 
+int lastWindowHeight, lastWindowWidth;
+
 void ToggleFullscreen(GLFWwindow* window) {
     if (isFullscreen) {
-        glfwSetWindowMonitor(window, nullptr, windowPosX, windowPosY, WIDTH, HEIGHT, 0);
+        glfwSetWindowMonitor(window, nullptr, windowPosX, windowPosY, lastWindowWidth, lastWindowHeight, 0);
     }
     else {
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
         glfwGetWindowPos(window, &windowPosX, &windowPosY);
-        glfwGetWindowSize(window, &WIDTH, &HEIGHT);
+        glfwGetWindowSize(window, &lastWindowWidth, &lastWindowHeight);
 
         glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
     }

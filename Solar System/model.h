@@ -217,7 +217,7 @@ private:
 
             if (!skip) {
                 // Skip loading texture if the last directory is "space"
-                /*if (getLastDirectory(directory) != "space") {
+                if (getLastDirectory(directory) != "space") {
                     Texture texture;
                     texture.id = TextureFromFile(str.C_Str(), directory);
                     texture.type = typeName;
@@ -225,14 +225,7 @@ private:
                     textures.push_back(texture);
 
                     this->textures_loaded.push_back(texture);
-                }*/
-                Texture texture;
-                texture.id = TextureFromFile(str.C_Str(), directory);
-                texture.type = typeName;
-                texture.path = str;
-                textures.push_back(texture);
-
-                this->textures_loaded.push_back(texture);
+                }
             }
         }
 
